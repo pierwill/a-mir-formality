@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Closer look at ty - The MIR Formality Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">How Formality works</li><li class="chapter-item expanded "><a href="layers.html"><strong aria-hidden="true">2.</strong> Layers of formality</a></li><li class="chapter-item expanded "><a href="closer-look-ty.html" class="active"><strong aria-hidden="true">3.</strong> Closer look at ty</a></li><li class="chapter-item expanded "><a href="closer-look-decl.html"><strong aria-hidden="true">4.</strong> Closer look at decl</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Closer look at mir</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Closer look at mir-op</div></li><li class="chapter-item expanded affix "><li class="part-title">What Formality can do</li><li class="chapter-item expanded "><a href="case-study.html"><strong aria-hidden="true">7.</strong> Case study: Implied bounds and perfect derive</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The MIR Formality Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="a-closer-look-at-formality-ty"><a class="header" href="#a-closer-look-at-formality-ty">A closer look at <code>formality-ty</code></a></h2>
+<p>Let's take a closer look at the <code>formality-ty</code> layer.</p>
+<h3 id="defining-rust-types"><a class="header" href="#defining-rust-types">Defining Rust types</a></h3>
+<p>The current definition of types looks like this:</p>
+<pre><code class="language-scheme">(define-language formality-ty
+  ...
+  (Ty :=
+      (TyApply TyName Parameters) ; Application type
+      VarId                       ; Bound or existential (inference) variable
+      (! VarId)                   ; Universal (placeholder) variable
+      )
+  (TyName :=
+          AdtId           ; enum/struct/union
+          TraitId         ; trait
+          AssociatedTy    ; Associated type
+          ScalarId        ; Something like i32, u32, etc
+          (Ref MaybeMut)  ; `&amp;mut` or `&amp;`, expects a lifetime + type parameter
+          (Tuple number)  ; tuple of given arity
+          )
+   ...
+   (ScalarId := i8 u8 i16 u16 i32 u32 i64 u64 i128 u128 bool)
+   ...
+   (AssociatedTy := (TraitId AssociatedTyId))
+   ...
+   (Parameters := (Parameter ...))
+   (Parameter := Ty Lt)
+   ...
+   ((AdtId VarId TraitId AssociatedTyId AnyId) := variable-not-otherwise-mentioned)
+)
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/ty/grammar.rkt#L25-L37">Source</a></span></p>
+<p>This definition is far from complete,
+but it should give you some idea for the level of abstraction we are shooting for
+and also how PLT Redex works.
+The idea here is that a type is either a variable,
+a placeholder that represents a generic type,
+or an &quot;application&quot; of a type name to some parameters.
+Let's see some examples:</p>
+<ul>
+<li>A generic type like <code>T</code> could either be <code>T</code> or <code>(! T)</code>:
+<ul>
+<li><code>T</code> is used when the generic has yet to be substituted, e.g., as part of a declaration.</li>
+<li><code>(! T)</code> is used as a placeholder to &quot;any type <code>T</code>&quot;.</li>
+</ul>
+</li>
+<li>A type like <code>Vec&lt;T&gt;</code> in Rust would be represented therefore as:
+<ul>
+<li><code>(TyApply Vec (T))</code>, in a declaration; or,</li>
+<li><code>(TyApply Vec ((! T)))</code> when checking it.</li>
+</ul>
+</li>
+<li>A scalar type like <code>i32</code> is represented as <code>(TyApply i32 ())</code>.</li>
+</ul>
+<p>As I said, this defintion of types is woefully incomplete. I expect it to eventually include:</p>
+<ul>
+<li>&quot;alias types&quot; like associated types and type aliases</li>
+<li>&quot;existential&quot; types like <code>dyn</code></li>
+<li>&quot;forall&quot; quantifies to cover <code>for&lt;'a&gt; ...</code></li>
+<li>&quot;function&quot; types <code>fn(A1...An) -&gt; R</code></li>
+<li>&quot;implication&quot; types <code>where(...) T</code> (these don't exist in Rust—yet)</li>
+</ul>
+<p>You can also see that the definition of types is aligned to highlight their &quot;essential&quot; characteristics
+and not necessarily for convenience elsewhere.
+Almost every Rust type, for example, boils down to <em>some</em> kind of &quot;application&quot;
+(it's likely that we can even represent <code>fn</code> types this way).</p>
+<h3 id="type-unification"><a class="header" href="#type-unification">Type unification</a></h3>
+<p>A key part of the type layer is that it includes <em>type unification</em>.
+That is, it defines the rules for making types equal.
+This will eventually have to be extended to cover subtyping (more on that a bit later)
+so that we can properly handle variance.</p>
+<p>Unification is accomplished in PLT Redex with a &quot;<a href="https://docs.racket-lang.org/redex/reference.html#%28form._%28%28lib._redex%2Freduction-semantics..rkt%29._define-metafunction%29%29">metafunction</a>&quot;,
+which just means a function that operates on terms
+(versus a function in the Rust program being analyzed):</p>
+<pre><code class="language-scheme">(define-metafunction formality-ty
+  most-general-unifier : Env TermPairs -&gt; EnvSubstitution or Error
+</code></pre>
+<p>This function takes an environment <code>Env</code> and a list of pairs of terms that should be equated and gives back either:</p>
+<ul>
+<li>a new environment and substitution from inference variables to values that will make the two terms syntactically equal; or,</li>
+<li>the term <code>Error</code>, if they cannot be unified.</li>
+</ul>
+<p>The unifier is a bit smarter than the traditional unification
+in that it knows about <em>universes</em> and so can handle &quot;forall&quot; proofs and things
+(that's what is found in the environment).
+This is the same as chalk and rustc.</p>
+<p>I won't cover the details but I'll just give an example.
+This is actually modified from a unit test from the code
+(<a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/ty/unify.rkt#L254-L269">source</a>).
+Invoking <code>most-general-unifier</code> like so:</p>
+<pre><code class="language-scheme">(most-general-unifier Env_2 ((A X)
+                             (X (TyApply Vec (Y)))
+                             (Y (TyApply i32 ()))))
+</code></pre>
+<!-- maybe: `A == X`,  `X == Vec<Y>`, and `Y == i32` -->
+<p>corresponds to saying that <code>[A = X, X = Vec&lt;Y&gt;, Y = i32]</code> must all be true,
+where <code>A</code>, <code>X</code> and <code>Y</code> are inference variables.
+The resulting output is a substitution that maps <code>A</code>, <code>X</code>, and <code>Y</code> to the following values:</p>
+<ul>
+<li><code>A -&gt; Vec&lt;i32&gt;</code></li>
+<li><code>X -&gt; Vec&lt;i32&gt;</code></li>
+<li><code>Y -&gt; i32</code></li>
+</ul>
+<h3 id="predicates"><a class="header" href="#predicates">Predicates</a></h3>
+<p><code>formality-ty</code> also defines the core predicates used to define Rust semantics.
+The current definition is as follows (<a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/ty/grammar.rkt#L121-L130">source</a>):</p>
+<pre><code class="language-scheme">(Predicate :=
+           ; `TraitRef` is (fully) implemented.
+           (Implemented TraitRef)
+           ; an impl exists for `TraitRef`; this *by itself* doesn't mean
+           ; that `TraitRef` is implemented, as the supertraits may not
+           ; have impls.
+           (HasImpl TraitRef)
+           ; the given type or lifetime is well-formed.
+           (WellFormed (ParameterKind Parameter))
+           )
+</code></pre>
+<p>These core predicates are then used to define a richer vocabulary of goals (things that can be proven)
+and various kinds of &quot;clauses&quot; (things that are assumed to be true, axioms)
+(<a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/ty/grammar.rkt#L136-L143">source</a>):</p>
+<pre><code class="language-scheme">  (Goals = (Goal ...))
+  (Goal :=
+        Predicate
+        (Equate Term Term)
+        (All Goals)
+        (Any Goals)
+        (Implies Hypotheses Goal)
+        (Quantifier KindedVarIds Goal)
+        )
+
+  ((Hypotheses Clauses Invariants) := (Clause ...))
+  ((Hypothesis Clause Invariant) :=
+                                 Predicate
+                                 (Implies Goals Predicate)
+                                 (ForAll KindedVarIds Clause)
+                                 )
+</code></pre>
+<p>Importantly, the <em>types layer</em> defines a solver that gives semantics to all the &quot;meta&quot; parts of goals and clauses -- e.g., it defines what it means to prove <code>(All (G1 G2))</code> (prove both <code>G1</code> and <code>G2</code>, duh). But it doesn't have any rules for what it means to prove the <em>core</em> predicates true -- so it could never prove <code>(Implemented (Debug ((! T))))</code>. Those rules all come from the declaration layer and are given to the types layer as part of the &quot;environment&quot;.</p>
+<h4 id="goals-versus-clauses"><a class="header" href="#goals-versus-clauses">Goals versus clauses</a></h4>
+<p>You might be curious about the distinction between goal and clause
+and why there are so many names for clauses (hypothesis, clause, invariant, etc).
+Let's talk briefly about that.</p>
+<p>The role of <code>ForAll</code> in goals and clauses is different.
+Proving \( \forall X. G \) requires proving that <code>G</code> is true for any value of <code>X</code>
+(i.e., for a placeholder <code>(! X)</code>, in our setup).
+By contrast, if you know \( \forall X. G \) as an axiom,
+it means that you can give <code>X</code> any value <code>X1</code> you want.
+Clauses have a limited structure between that keeps the solver tractable.
+The idea is that they are always &quot;ways to prove a single predicate&quot; true;
+we don't allow a clause like <code>(Any (A B))</code> as a clause,
+since that would mean &quot;A or B is true but you don't know which&quot;.
+That would then be a second way to prove an <code>Any</code> goal like <code>(Any ...)</code>
+and introduce lots of complications (we got enough already, thanks).</p>
+<p>Further distinctions between &quot;hypotheses&quot;, &quot;clauses&quot;, and &quot;invariants&quot;
+are used to express and capture implied bounds.
+We'll defer a detailed analysis until the section below, but briefly:</p>
+<ul>
+<li>&quot;Hypotheses&quot; are where-clauses that are assumed to be true in this section of the code.</li>
+<li>&quot;Clauses&quot; are global rules that are always true (derived, e.g., from an impl).</li>
+<li>&quot;Invariants&quot; express implied bounds (e.g., supertrait relationships like &quot;if <code>T: Eq</code>, then <code>T: PartialEq</code>&quot;).</li>
+</ul>
+<h3 id="solver"><a class="header" href="#solver">Solver</a></h3>
+<p>Putting all this together, the types layer currently includes a relatively simple solver called <code>cosld-solve</code>.
+The name refers to the classic <a href="https://en.wikipedia.org/wiki/SLD_resolution">SLD Resolution Algorithm</a> that powers Prolog,
+although the version of it that we've implemented is extended in two ways:</p>
+<ul>
+<li>It is coinductive (hence <code>cosld</code>) as <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.9618&amp;rep=rep1&amp;type=pdf">described by Luke Simon et al.</a>.
+This means it permits cycles, roughly speaking.</li>
+<li>It covers hereditary Harrop predicates using the <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.107.2510&amp;rep=rep1&amp;type=pdf">techniques described by Gopalan Nadathur</a>.</li>
+</ul>
+<p>In terms of chalk solvers, it is &quot;similar&quot; to slg, but much simpler in its structure (it doesn't do any caching).</p>
+<p>All those fancy words aside, it's really quite simple.
+It's defined via induction rules, which PLT Redex lets us write in a natural style with <a href="https://docs.racket-lang.org/redex/reference.html#%28form._%28%28lib._redex%2Freduction-semantics..rkt%29._define-judgment-form%29%29"><code>define-judgment-form</code></a>.
+The definition begins like so:</p>
+<pre><code class="language-scheme">(define-judgment-form formality-ty
+  #:mode (prove I I I O)
+  #:contract (prove Env Predicates_stack Goal EnvSubstitution)
+</code></pre>
+<p>This says that we are trying to prove something written as <code>(prove Env Predciates Goal EnvSubstitution)</code>,
+where the first three are 'inputs' and the final name is an 'output'
+(the input vs output distinction is often left implicit in Prolog and other languages).
+The idea is that we will prove that <code>Goal</code> is true in some environment <code>Env</code>;
+the environment contains our hypotheses and clauses, as well as information about the variables in scope.
+The <code>Predicates</code> list is the stack of things we are solving, it's used to detect cycles.
+The <code>EnvSubstitution</code> is the <em>output</em>, it is a modified environment
+paired with a substitution that potentially gives new values to inference variables found in <code>Goal</code>.</p>
+<p>Here is a simple rule.
+It defines the way we prove <code>Any</code> (<a href="https://github.com/nikomatsakis/a-mir-formality/blob/main/src/ty/cosld-solve/prove.rkt#L62-L65">source</a>).
+The notation is as follows.
+The stuff &quot;above the line&quot; are the conditions that have to be proven;
+the thing &quot;under the line&quot; is the conclusion that we can draw.</p>
+<pre><code class="language-scheme">  [(prove Env Predicates_stack Goal_1 EnvSubstitution_out)
+   ------------------------------------------------------- &quot;prove-any&quot;
+   (prove Env Predicates_stack (Any (Goal_0 ... Goal_1 Goal_2 ...)) EnvSubstitution_out)
+   ]
+</code></pre>
+<p>This rule says:</p>
+<ul>
+<li>Given some goal <code>(Any (Goal_0 ... Goal_1 Goal_2 ...))</code> where <code>Goal_1</code> is found somewhere in that list...
+<ul>
+<li>if we can prove <code>Goal_1</code> to be true, then the <code>Any</code> goal is true.</li>
+</ul>
+</li>
+</ul>
+<p>Or read another way:</p>
+<ul>
+<li>If we can prove <code>Goal_1</code> to be true, then we can prove <code>(Any Goals)</code> to be true so long as <code>Goal_1</code> is somewhere in <code>Goals</code>.</li>
+</ul>
+<p>It shows you a bit of the power of PLT Redex (and Racket's pattern matching), as well. We are able to write the rule in a &quot;non-deterministic&quot; way -- saying, &quot;pick any goal from the list&quot; and prove it. Redex will search all the possibilities.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="layers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="closer-look-decl.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="layers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="closer-look-decl.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Closer look at decl - The MIR Formality Book</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded affix "><li class="part-title">How Formality works</li><li class="chapter-item expanded "><a href="layers.html"><strong aria-hidden="true">2.</strong> Layers of formality</a></li><li class="chapter-item expanded "><a href="closer-look-ty.html"><strong aria-hidden="true">3.</strong> Closer look at ty</a></li><li class="chapter-item expanded "><a href="closer-look-decl.html" class="active"><strong aria-hidden="true">4.</strong> Closer look at decl</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Closer look at mir</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Closer look at mir-op</div></li><li class="chapter-item expanded affix "><li class="part-title">What Formality can do</li><li class="chapter-item expanded "><a href="case-study.html"><strong aria-hidden="true">7.</strong> Case study: Implied bounds and perfect derive</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The MIR Formality Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="a-closer-look-at-formality-decl"><a class="header" href="#a-closer-look-at-formality-decl">A closer look at <code>formality-decl</code></a></h2>
+<p>Now that we've surveyed the type layer, let's look at the declaration layer.
+It begins by defining an &quot;extended&quot; language <code>formality-decl</code>
+that adds new stuff to <code>formality-ty</code>:</p>
+<pre><code class="language-scheme">(define-extended-language formality-decl formality-ty ...)
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/grammar.rkt#L5">Source</a></span></p>
+<p>For example, a set of crates looks like this:</p>
+<pre><code class="language-scheme"> (CrateDecls := (CrateDecl ...))
+  (CrateDecl := (CrateId CrateContents))
+  (CrateContents := (crate (CrateItemDecl ...)))
+  (CrateItemDecl := AdtDecl TraitDecl TraitImplDecl)
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/grammar.rkt#L7-L10">Source</a></span></p>
+<p>Basically a crate <code>a</code> is represented as a list of items like <code>(a (crate (item1 item2 item3)))</code>
+where <code>item{1,2,3}</code> are either structs/enums (<code>AdtDecl</code>), traits (<code>TraitDecl</code>), or impls (<code>TraitImplDecl</code>).</p>
+<h3 id="declaring-traits-in-formalitydecl"><a class="header" href="#declaring-traits-in-formalitydecl">Declaring traits in <code>FormalityDecl</code></a></h3>
+<p>Let's look more closely at one of those kinds of items.
+A trait declaration looks like this:</p>
+<pre><code class="language-scheme">  (TraitDecl := (TraitId TraitContents))
+  (TraitContents := (trait KindedVarIds WhereClauses TraitItems))
+  ...
+  (WhereClauses := (WhereClause ...))
+  (WhereClause :=
+               (ForAll KindedVarIds WhereClause)
+               (Implemented TraitRef)
+               )
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/grammar.rkt#L26-L27">Source</a></span></p>
+<p>Here:</p>
+<ul>
+<li><code>TraitId</code> is the name of the trait</li>
+<li><code>KindedVarIds</code> is a list of generic parameters like <code>((TyVar Self) (TyVar T))</code>.
+Note that the <code>Self</code> parameter is made explicit. </li>
+<li><code>WhereClauses</code> is a list of where-clauses, which are currently just <code>T: Foo</code> trait references
+(though potentially higher-ranked).</li>
+<li><code>TraitItems</code> are the contents of the trait, currently not used for anything.<!-- What would go here? Methods? -->
+</li>
+</ul>
+<p>So the following Rust trait</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Foo&lt;T: Ord&gt;: Bar { }
+<span class="boring">}
+</span></code></pre></pre>
+<p>would be represented as</p>
+<pre><code class="language-scheme">(Foo (trait ; KindedVarIds -- the generics:
+            ((TyKind Self) (TyKind T))
+            ; where clauses, including supertraits:
+            ((Implemented (Ord (T))) (Implemented (Bar (Self))))
+            ; trait items, empty list:
+            ()
+            ))
+</code></pre>
+<h3 id="lowering-crate-items-to-clauses"><a class="header" href="#lowering-crate-items-to-clauses">Lowering crate items to clauses</a></h3>
+<p>The next part of <code>formality-decl</code> is the metafunction <code>env-with-crate-decls</code>:</p>
+<pre><code class="language-scheme">(define-metafunction formality-decl
+  ;; Add the clauses/hypothesis from multiple crates
+  ;; into the environment, where CrateId names the current crate.
+  env-with-crate-decls : Env CrateDecls CrateId -&gt; Env
+  ; ...
+  )
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/decl-to-clause.rkt#L20-L23">Source</a></span></p>
+<p>This metafunction converts <em>Rust declarations</em> into the <em>environment</em> from the type layer.
+Note that it takes:</p>
+<ul>
+<li>a base environment <code>Env</code> (typically just the constant <code>EmptyEnv</code>)</li>
+<li>a set of crates <code>CrateDecls</code> (this is meant to include the imports)</li>
+<li>the ID of the current crate <code>CrateId</code>.
+This is because the set of rules we generate for a particular item
+can be different depending on whether we are compiling the crate where it was declared or from some other crate
+(consider e.g. <code>#[non_exhaustive]</code>).</li>
+</ul>
+<h3 id="generating-the-clauses-for-a-single-crate-item"><a class="header" href="#generating-the-clauses-for-a-single-crate-item">Generating the clauses for a single crate item</a></h3>
+<p>The <code>env-with-crate-decls</code> function iterates over all the items in all the crates
+and ultimately invokes this helper function, <code>crate-item-decl-rules</code>:</p>
+<pre><code class="language-scheme">(define-metafunction formality-decl
+  ;; Given a crate item, return a tuple of:
+  ;;
+  ;; * The clauses that hold in all crates due to this item
+  ;; * The invariants that hold in all crates due to this item
+  ;; * The invariants that hold only in the crate that declared this item
+  crate-item-decl-rules : CrateDecls CrateItemDecl -&gt; (Clauses Invariants Invariants)
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/decl-to-clause.rkt#L57-L63">Source</a></span></p>
+<p><code>crate-item-decl-rules</code> takes </p>
+<ul>
+<li>the full set of crates <code>CrateDecls</code> and</li>
+<li>the declaration of a single item <code>CrateItemDecl</code></li>
+</ul>
+<p>and it returns a 3-tuple.
+As the comment says, this contains both clauses (rules that can be used to derive true facts)
+along with two sets of invariants.
+We'll cover the invariants later.</p>
+<!-- move/copy description of metafunctions to ty chapter -->
+<p>Metafunctions are basically a gigantic match statement.
+They consist of a series of clauses,
+each of which begins with a &quot;pattern match&quot; against the arguments. </p>
+<p>To see how it works, let's look at the case for an <code>impl</code> from that section.
+To begin with, here is the comment explaining what we aim to do:</p>
+<pre><code class="language-scheme"> [;; For an trait impl declared in the crate C, like the following:
+   ;;
+   ;;     impl&lt;'a, T&gt; Foo&lt;'a, T&gt; for i32 where T: Ord { }
+   ;;
+   ;; We consider `HasImpl` to hold if (a) all inputs are well formed and (b) where
+   ;; clauses are satisfied:
+   ;;
+   ;;     (ForAll ((LtKind 'a) (TyKind T))
+   ;;         (HasImpl (Foo (i32 'a u32))) :-
+   ;;             (WellFormed (TyKind i32))
+   ;;             (WellFormed (TyKind i32))
+   ;;             (Implemented (Ord T)))
+</code></pre>
+<p>The actual code for this
+begins by matching the item that we are generating rules for:</p>
+<pre><code class="language-scheme">(crate-item-decl-rules CrateDecls (impl KindedVarIds_impl TraitRef WhereClauses_impl ImplItems))
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/decl-to-clause.rkt#L141-L166">Source</a></span></p>
+<p>The next line is the final result.
+The function this is part of  -- this says we will produce one global clause</p>
+<!-- ??? -->
+<pre><code class="language-scheme">((Clause) () ())
+</code></pre>
+<p>This final result is allowed to refer to variables defined on the following lines, shown below.
+A <code>(where/error &lt;pattern&gt; &lt;value&gt;)</code> clause is effectively just <code>let &lt;pattern&gt; = &lt;value&gt;</code>, in Rust terms;
+the <code>/error</code> part means &quot;if this pattern doesn't match, generate an error&quot;.
+You can also write <code>(where &lt;pattern&gt; &lt;value&gt;)</code>, but that means that if the pattern doesn't match, 
+the metafunction should to see if the next rule works.</p>
+<p>The impl code begins by pattern matching against the <code>TraitRef</code> that the impl is implementing
+(in the example from the comment, that would be <code>(Foo (i32 'a T))</code>).
+We extract out the <code>TraitId</code> and the self type <code>Parameter_trait</code>:</p>
+<pre><code class="language-scheme">   (where/error (TraitId (Parameter_trait ...)) TraitRef)
+</code></pre>
+<p>Next we look up the definition of the trait itself to find out its generics, using a helper function <code>item-with-id</code>.
+This matches and extracts out the parameter kinds (lifetimes vs types, in this code):</p>
+<pre><code class="language-scheme">   (where/error (trait KindedVarIds_trait _ _) (item-with-id CrateDecls TraitId))
+   (where/error ((ParameterKind_trait _) ...) KindedVarIds_trait)
+</code></pre>
+<p>Next we convert the where clauses (e,g, <code>T: Ord</code>) into goals, using a helper function <code>where-clauses-to-goals</code> (described below):</p>
+<pre><code class="language-scheme">   (where/error (Goal_wc ...) (where-clauses-to-goals WhereClauses_impl))
+</code></pre>
+<p>Finally we can generate that variable <code>Clause</code> that was referenced in the final result.
+Note that we use the <code>...</code> notation to &quot;flatten&quot; together the list of goals from the where-clauses (<code>Goal_wc ...</code>)
+and <code>WellFormed</code>-ness goals that we must prove
+(i.e., to use the impl, we must show that its input types are well-formed):</p>
+<pre><code class="language-scheme">   (where/error Clause (ForAll KindedVarIds_impl
+                               (Implies
+                                ((WellFormed (ParameterKind_trait Parameter_trait)) ...
+                                 Goal_wc ...
+                                 )
+                                (HasImpl TraitRef))))
+   ]
+</code></pre>
+<p>The <code>where-clause-to-goal</code> helper is fairly simple.
+Here is the source, I'll leave puzzling it out as an exercise to the reader:</p>
+<pre><code class="language-scheme">(define-metafunction formality-decl
+  ;; Convert a where clause `W` into a goal that proves `W` is true.
+  where-clause-to-goal : WhereClause -&gt; Goal
+
+  ((where-clause-to-goal (Implemented TraitRef))
+   (Implemented TraitRef)
+   )
+
+  ((where-clause-to-goal (ForAll KindedVarIds WhereClause))
+   (ForAll KindedVarIds Goal)
+   (where/error Goal (where-clause-to-goal WhereClause))
+   )
+
+  ; FIXME: Support lifetimes, projections
+  )
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/decl-to-clause.rkt#L197-L211">Source</a></span></p>
+<h3 id="generating-the-ok-goals-for-a-crate"><a class="header" href="#generating-the-ok-goals-for-a-crate">Generating the &quot;ok goals&quot; for a crate</a></h3>
+<p>In addition to &quot;clauses&quot;, there is also a function <code>crate-ok-goal</code> 
+that generate goals for each crate item in a given crate:</p>
+<pre><code class="language-scheme">(define-metafunction formality-decl
+  ;; Given a set of crates and the decl for the current crate,
+  ;; generate the goal that proves all declarations in the current crate are
+  ;; &quot;ok&quot;. Other crates are assumed to be &quot;ok&quot;.
+  crate-ok-goal : CrateDecls CrateDecl -&gt; Goal
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/decl-ok.rkt#L7-L11">Source</a></span></p>
+<p>The idea is that the crate is &quot;ok&quot; (i.e., passes the type check) if these goals are satisfied.
+For the declarations layer, these goals correspond roughly to rustc's <code>wfcheck</code>.
+Here is the rule for impls:</p>
+<pre><code class="language-scheme">  [;; For a trait impl declared in the crate C, like the following:
+   ;;
+   ;;     impl&lt;'a, T&gt; Foo&lt;'a, T&gt; for u32 { }
+   ;;
+   ;; we require that the trait is implemented.
+   (crate-item-ok-goal _ (impl KindedVarIds_impl TraitRef WhereClauses_impl ImplItems))
+   (ForAll KindedVarIds_impl
+           (Implies ((WellFormed KindedVarId_impl) ... WhereClause_impl ...)
+                    (All ((Implemented TraitRef)))))
+
+   (where/error (KindedVarId_impl ...) KindedVarIds_impl)
+   (where/error (WhereClause_impl ...) WhereClauses_impl)
+   ]
+  )
+</code></pre>
+<p><span class="caption"><a href="https://github.com/nikomatsakis/a-mir-formality/blob/47eceea34b5f56a55d781acc73dca86c996b15c5/src/decl/decl-ok.rkt#L59-L71">Source</a></span></p>
+<p>In short, an <code>impl</code> is well-formed if the trait is fully implemented.
+We'll look at the definition of <em>implemented</em> in more detail in <a href="./case-study.html">the next section</a>,
+but for now it suffices to say that a trait is implemented if
+(a) it has an impl and 
+(b) all of its where-clauses are satisfied.
+Since we know there is an impl (we're checking it right now!) this is equivalent to saying 
+&quot;all of the trait's where clauses are satisfied&quot;.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="closer-look-ty.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="case-study.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="closer-look-ty.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="case-study.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
