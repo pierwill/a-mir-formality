@@ -26,10 +26,8 @@ jobs:
           MDBOOK_SHA: c6810849bfdcf9fdeafb693129308c8e4b7811134e1fe413eb7bacac697b9789
         run: |
           cd book
-          curl -LO https://github.com/rust-lang/mdBook/releases/download/v0.4.5/mdbook-v0.4.5-x86_64-unknown-linux-gnu.tar.gz
+          curl -L -o mdbook mdbook https://github.com/rust-lang/mdBook/releases/download/v0.4.5/mdbook-v0.4.5-x86_64-unknown-linux-gnu.tar.gz
           echo "${MDBOOK_SHA}  mdbook-v0.4.5-x86_64-unknown-linux-gnu.tar.gz" | sha256sum --check -
-          # Add the book directory to the $PATH
-          echo "$GITHUB_WORKSPACE/book" >> $GITHUB_PATH
       # - name: Execute tests for book
       #   run: cd book && ./mdbook test
       - name: Build book
