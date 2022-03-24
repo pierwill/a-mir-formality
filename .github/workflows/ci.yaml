@@ -42,8 +42,7 @@ jobs:
           curl -LsSfO https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs
           echo "${DEPLOY_SHA}  deploy.rs" | sha256sum --check -
           rustc deploy.rs -o /tmp/deploy
-          mkdir doc/
-          mv book/book/* /
+          mv book/book/* ./
           /tmp/deploy
         # if: matrix.rust == 'stable' && github.ref == 'refs/heads/master'
 
