@@ -39,10 +39,10 @@ jobs:
           GITHUB_DEPLOY_KEY: ${{ secrets.k }}
         run: |
           # touch target/doc/.nojekyll
-          curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs
+          curl -LsSfO https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs
           echo "${DEPLOY_SHA}  deploy.rs" | sha256sum --check -
           rustc deploy.rs -o /tmp/deploy
-          cp -r book/book/html target/doc/book
+          cp -r book/book doc/book
           (cd target/doc && /tmp/deploy)
         # if: matrix.rust == 'stable' && github.ref == 'refs/heads/master'
 
