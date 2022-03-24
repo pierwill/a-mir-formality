@@ -38,7 +38,7 @@ jobs:
           DEPLOY_SHA: bef09c1cac587271d0352b0ae59949d2cab93b3d1c9dc45366a42fbe51f6221a
           GITHUB_DEPLOY_KEY: ${{ secrets.k }}
         run: |
-          touch target/doc/.nojekyll
+          # touch target/doc/.nojekyll
           curl -LsSf https://raw.githubusercontent.com/rust-lang/simpleinfra/master/setup-deploy-keys/src/deploy.rs
           echo "${DEPLOY_SHA}  deploy.rs" | sha256sum --check -
           rustc deploy.rs -o /tmp/deploy
